@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  root "timeline#index"
+  root "welcome#index"
+  resource :registration, only: %i[new create]
+  get "timeline", to: "timeline#index", as: :timeline
+  
   resource :session
   resources :passwords, param: :token
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
