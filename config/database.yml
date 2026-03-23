@@ -8,6 +8,10 @@ default: &default
   adapter: sqlite3
   max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
+  journal_mode: wal
+  synchronous: normal
+  shared_cache: true
+  transaction_mode: immediate
 
 development:
   <<: *default
@@ -30,11 +34,3 @@ production:
     <<: *default
     database: storage/production_cache.sqlite3
     migrations_paths: db/cache_migrate
-  queue:
-    <<: *default
-    database: storage/production_queue.sqlite3
-    migrations_paths: db/queue_migrate
-  cable:
-    <<: *default
-    database: storage/production_cable.sqlite3
-    migrations_paths: db/cable_migrate
