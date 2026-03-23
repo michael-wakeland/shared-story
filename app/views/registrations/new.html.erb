@@ -1,31 +1,40 @@
-<div class="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-md text-center">
-    <div class="mx-auto h-16 w-16 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg mb-6 text-white">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+<div class="w-full min-h-screen bg-gradient-to-br from-[#A855F7]/5 via-white to-indigo-50 overflow-x-hidden relative flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  
+  <!-- Decorative Background Elements -->
+  <div class="fixed top-20 right-10 w-64 h-64 bg-[#A855F7]/5 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="fixed bottom-20 left-10 w-72 h-72 bg-indigo-200/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-100/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+  <div class="sm:mx-auto sm:w-full sm:max-w-md text-center relative z-10">
+    <div class="mx-auto h-16 w-16 bg-gradient-to-br from-[#A855F7] to-[#7C3AED] rounded-2xl flex items-center justify-center shadow-xl shadow-[#A855F7]/20 mb-6 text-white relative overflow-hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
       </svg>
     </div>
-    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight leading-tight">
       Start your story
     </h2>
-    <p class="mt-2 text-sm text-slate-600">
+    <p class="mt-3 text-[15px] text-gray-500 font-medium">
       Or
-      <%= link_to "log in to your existing account", new_session_path, class: "font-medium text-indigo-600 hover:text-indigo-500 transition-colors" %>
+      <%= link_to "return to your family's journal", new_session_path, class: "font-bold text-[#A855F7] hover:text-[#7C3AED] transition-colors underline decoration-2 underline-offset-4 decoration-[#A855F7]/20 hover:decoration-[#A855F7]" %>
     </p>
   </div>
 
-  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-    <div class="bg-white py-8 px-4 shadow-xl shadow-slate-200/50 sm:rounded-3xl sm:px-10 border border-slate-100 border-t-slate-50">
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
+    <div class="bg-white/80 backdrop-blur-xl py-10 px-6 shadow-2xl shadow-gray-200/50 sm:rounded-[2rem] sm:px-12 border border-white relative overflow-hidden">
       
-      <%= form_with model: @user, url: registration_path, class: "space-y-6" do |form| %>
+      <!-- Subtle top inner highlight -->
+      <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80"></div>
+
+      <%= form_with model: @user, url: registration_path, class: "space-y-6 relative" do |form| %>
         <% if @user.errors.any? %>
-          <div class="rounded-md bg-red-50 p-4 mb-6 border border-red-100">
+          <div class="rounded-xl bg-red-50 p-4 mb-6 border border-red-100">
             <div class="flex">
               <div class="ml-3">
-                <h3 class="text-sm font-medium text-red-800">
+                <h3 class="text-sm font-semibold text-red-800">
                   <%= pluralize(@user.errors.count, "error") %> prohibited this account from being saved:
                 </h3>
-                <div class="mt-2 text-sm text-red-700">
+                <div class="mt-2 text-sm text-red-700 font-medium">
                   <ul class="list-disc pl-5 space-y-1">
                     <% @user.errors.full_messages.each do |message| %>
                       <li><%= message %></li>
@@ -38,28 +47,28 @@
         <% end %>
 
         <div>
-          <%= form.label :email_address, class: "block text-sm font-medium text-slate-700" %>
+          <%= form.label :email_address, class: "block text-[13px] font-bold text-gray-700 uppercase tracking-wider mb-2 ml-1" %>
           <div class="mt-1">
-            <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "you@example.com", class: "appearance-none block w-full px-4 py-3 border border-slate-300 rounded-xl shadow-sm placeholder-slate-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors" %>
+            <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "you@family.com", class: "appearance-none block w-full px-5 py-4 bg-gray-50/50 border border-gray-200 rounded-2xl shadow-sm placeholder-gray-400 font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#A855F7] focus:border-[#A855F7] focus:bg-white sm:text-[15px] transition-all duration-200" %>
           </div>
         </div>
 
         <div>
-          <%= form.label :password, class: "block text-sm font-medium text-slate-700" %>
+          <%= form.label :password, class: "block text-[13px] font-bold text-gray-700 uppercase tracking-wider mb-2 ml-1" %>
           <div class="mt-1">
-            <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "••••••••", class: "appearance-none block w-full px-4 py-3 border border-slate-300 rounded-xl shadow-sm placeholder-slate-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors" %>
+            <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "••••••••", class: "appearance-none block w-full px-5 py-4 bg-gray-50/50 border border-gray-200 rounded-2xl shadow-sm placeholder-gray-400 font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#A855F7] focus:border-[#A855F7] focus:bg-white sm:text-[15px] transition-all duration-200" %>
           </div>
         </div>
 
         <div>
-          <%= form.label :password_confirmation, class: "block text-sm font-medium text-slate-700" %>
+          <%= form.label :password_confirmation, "Confirm Password", class: "block text-[13px] font-bold text-gray-700 uppercase tracking-wider mb-2 ml-1" %>
           <div class="mt-1">
-            <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "••••••••", class: "appearance-none block w-full px-4 py-3 border border-slate-300 rounded-xl shadow-sm placeholder-slate-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors" %>
+            <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "••••••••", class: "appearance-none block w-full px-5 py-4 bg-gray-50/50 border border-gray-200 rounded-2xl shadow-sm placeholder-gray-400 font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#A855F7] focus:border-[#A855F7] focus:bg-white sm:text-[15px] transition-all duration-200" %>
           </div>
         </div>
 
-        <div class="pt-2">
-          <%= form.submit "Sign up", class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors cursor-pointer" %>
+        <div class="pt-4">
+          <%= form.submit "Begin Your Story", class: "w-full flex justify-center py-4 px-6 border border-transparent rounded-2xl shadow-lg shadow-[#A855F7]/20 text-[15px] font-bold text-white bg-gradient-to-r from-[#A855F7] to-[#7C3AED] hover:shadow-xl hover:shadow-[#A855F7]/30 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A855F7] transition-all duration-200 cursor-pointer" %>
         </div>
       <% end %>
 

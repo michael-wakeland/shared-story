@@ -21,11 +21,68 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    
+    <!-- FontAwesome for standard icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="flex flex-col min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden antialiased font-sans">
+    
+    <% if authenticated? %>
+      <!-- Authenticated Header -->
+      <header class="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between items-center h-16">
+            
+            <div class="flex items-center">
+              <%= link_to root_path, class: "flex items-center gap-3 group" do %>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#A855F7] to-[#7C3AED] flex items-center justify-center text-white shadow-md group-hover:shadow-lg transition-all transform group-hover:-translate-y-0.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <span class="font-bold text-xl tracking-tight text-gray-900 group-hover:text-[#A855F7] transition-colors font-serif">Shared Story</span>
+              <% end %>
+            </div>
+            
+            <nav class="flex items-center gap-6">
+              <%= link_to "Timeline", timeline_path, class: "text-[15px] font-semibold text-gray-600 hover:text-[#A855F7] transition-colors" %>
+              <div class="w-px h-5 bg-gray-200"></div>
+              <%= button_to "Sign out", session_path, method: :delete, class: "text-[15px] font-semibold text-gray-500 hover:text-red-500 transition-colors cursor-pointer bg-transparent border-0" %>
+            </nav>
+            
+          </div>
+        </div>
+      </header>
+    <% end %>
+
+    <main class="flex-grow flex flex-col relative w-full">
       <%= yield %>
     </main>
+
+    <% if authenticated? %>
+      <!-- Authenticated Footer -->
+      <footer class="bg-white border-t border-gray-100 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+            
+            <div class="flex items-center gap-3 text-gray-500 text-sm font-medium">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#A855F7]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              <span>&copy; <%= Date.today.year %> Shared Story. Family journal.</span>
+            </div>
+            
+            <div class="flex gap-6 text-sm font-medium text-gray-400">
+              <a href="#" class="hover:text-[#A855F7] transition-colors">Privacy</a>
+              <a href="#" class="hover:text-[#A855F7] transition-colors">Terms</a>
+              <a href="#" class="hover:text-[#A855F7] transition-colors">Help</a>
+            </div>
+            
+          </div>
+        </div>
+      </footer>
+    <% end %>
+    
   </body>
 </html>

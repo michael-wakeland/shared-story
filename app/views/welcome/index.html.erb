@@ -1,37 +1,145 @@
-<div class="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-md text-center">
-    <div class="mx-auto h-16 w-16 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg mb-6 text-white">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-      </svg>
-    </div>
-    
-    <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
-      Shared Story
-    </h1>
-    <p class="mt-4 text-lg text-slate-600 px-4">
-      A private, continuous timeline of our family's chapters, stories, and moments.
-    </p>
-  </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
-    <div class="bg-white py-8 px-4 shadow-xl shadow-slate-200/50 sm:rounded-3xl sm:px-10 border border-slate-100 border-t-slate-50">
-      
-      <div class="flex flex-col space-y-4">
-        <%= link_to "Log In", new_session_path, class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors" %>
+<style>
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+    .float-animation {
+        animation: float 6s ease-in-out infinite;
+    }
+    /* Hide scrollbars for the feature grid if it overflows on mobile */
+    .hide-scrollbars::-webkit-scrollbar {
+        display: none;
+    }
+    .hide-scrollbars {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+
+<div class="w-full min-h-screen bg-gradient-to-br from-[#A855F7]/5 via-white to-indigo-50 overflow-x-hidden relative flex flex-col">
+    
+    <!-- Decorative Background Elements -->
+    <div class="fixed top-20 right-10 w-64 h-64 bg-[#A855F7]/5 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="fixed bottom-20 left-10 w-72 h-72 bg-indigo-200/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-100/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+    <div id="welcome-container" class="flex-1 flex flex-col relative z-10">
         
-        <div class="relative mt-4">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-slate-200"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-white text-slate-500">New to the family app?</span>
-          </div>
+        <!-- Hero Section -->
+        <div id="hero-section" class="flex-1 flex flex-col items-center justify-center px-4 py-12 md:py-16 relative">
+            
+            <!-- Animated Logo -->
+            <div class="mb-8 float-animation">
+                <div class="inline-flex items-center justify-center w-28 h-28 md:w-32 md:h-32 bg-gradient-to-br from-[#A855F7] to-[#7C3AED] rounded-3xl shadow-2xl shadow-[#A855F7]/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 md:h-16 md:w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Main Heading -->
+            <div class="text-center max-w-2xl mb-12">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-4 leading-tight">
+                    Welcome to<br/>
+                    <span class="bg-gradient-to-r from-[#A855F7] to-[#7C3AED] bg-clip-text text-transparent">Shared Story</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-500 max-w-lg mx-auto leading-relaxed">
+                    Your family's private space to share moments, memories, and stay connected
+                </p>
+            </div>
+
+            <!-- Feature Cards -->
+            <div id="features-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full max-w-5xl mb-12 px-4">
+                
+                <!-- Feature 1 -->
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-[#A855F7]/10 transition-all transform hover:scale-105 border border-white">
+                    <div class="w-14 h-14 bg-[#E9D5FF] rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-feather-pointed text-[#A855F7] text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Preserve Memories</h3>
+                    <p class="text-sm text-gray-500">Save stories that might otherwise be forgotten over generations</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-[#A855F7]/10 transition-all transform hover:scale-105 border border-white">
+                    <div class="w-14 h-14 bg-[#E9D5FF] rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-users-rectangle text-[#A855F7] text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Collaborative Timeline</h3>
+                    <p class="text-sm text-gray-500">Every family member can contribute their perspective to the journey</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg shadow-gray-200/50 hover:shadow-xl hover:shadow-[#A855F7]/10 transition-all transform hover:scale-105 border border-white">
+                    <div class="w-14 h-14 bg-[#E9D5FF] rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-shield-heart text-[#A855F7] text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Private & Secure</h3>
+                    <p class="text-sm text-gray-500">A sanctuary for your family stories, away from social media noise</p>
+                </div>
+
+            </div>
+
+            <!-- CTA Buttons -->
+            <div id="cta-section" class="w-full max-w-md px-4 space-y-4">
+                <%= link_to new_registration_path, class: "w-full py-4 bg-gradient-to-r from-[#A855F7] to-[#7C3AED] text-white rounded-xl font-bold text-lg hover:shadow-xl hover:shadow-[#A855F7]/40 transform hover:scale-[1.02] active:scale-[0.98] transition-all flex justify-center items-center" do %>
+                    Begin Your Story
+                <% end %>
+                
+                <%= link_to new_session_path, class: "w-full py-4 bg-white text-[#A855F7] border-2 border-[#A855F7] rounded-xl font-bold text-lg hover:bg-[#A855F7] hover:text-white transition-all transform hover:scale-[1.02] active:scale-[0.98] flex justify-center items-center" do %>
+                    Sign In
+                <% end %>
+
+                <div class="text-center pt-2">
+                    <button class="text-gray-400 text-sm hover:text-[#A855F7] transition-colors">
+                        <i class="fa-solid fa-envelope-open-text mr-2"></i>
+                        Have an invite code?
+                    </button>
+                </div>
+            </div>
+
         </div>
 
-        <%= link_to "Sign Up", new_registration_path, class: "w-full flex justify-center py-3 px-4 border-2 border-slate-200 rounded-xl shadow-sm text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-all" %>
-      </div>
-      
+        <!-- Bottom Info Section -->
+        <div id="bottom-info" class="bg-white/50 backdrop-blur-sm border-t border-gray-100 py-8 px-4">
+            <div class="max-w-4xl mx-auto">
+                
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="text-center">
+                        <div class="text-2xl md:text-3xl font-bold text-[#A855F7] mb-1">Private</div>
+                        <div class="text-xs md:text-sm text-gray-500 uppercase tracking-wider font-semibold">Invite-only</div>
+                    </div>
+                    <div class="text-center border-x border-gray-100">
+                        <div class="text-2xl md:text-3xl font-bold text-[#A855F7] mb-1">Permanent</div>
+                        <div class="text-xs md:text-sm text-gray-500 uppercase tracking-wider font-semibold">Your Legacy</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl md:text-3xl font-bold text-[#A855F7] mb-1">Simple</div>
+                        <div class="text-xs md:text-sm text-gray-500 uppercase tracking-wider font-semibold">Easy to use</div>
+                    </div>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-gray-500 text-xs md:text-sm font-medium">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-lock text-[#A855F7]"></i>
+                        <span>End-to-end secure</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-user-shield text-[#A855F7]"></i>
+                        <span>No ads or tracking</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-heart-pulse text-[#A855F7]"></i>
+                        <span>Made for families</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
-  </div>
 </div>
