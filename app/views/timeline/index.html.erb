@@ -1,60 +1,80 @@
 <%= turbo_stream_from "timeline" %>
 
-<div class="flex-1 w-full bg-slate-50 flex flex-col pt-8 overflow-hidden">
-  <div class="text-center mb-10 shrink-0">
+<div class="flex-1 w-full bg-slate-50 flex flex-col pt-8 overflow-hidden relative">
+  <div class="text-center mb-6 shrink-0 relative px-4 z-20">
     <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight">Our Family Story</h1>
     <p class="text-slate-500 mt-2 text-lg">A timeline of our chapters</p>
+    
+    <div class="mt-4 sm:mt-0 sm:absolute sm:right-8 sm:top-1/2 sm:-translate-y-1/2">
+      <%= link_to new_chapter_path, class: "inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl font-medium shadow-sm transition-colors", data: { turbo_frame: "modal" } do %>
+        <i class="fa-solid fa-plus"></i> New Chapter
+      <% end %>
+    </div>
   </div>
 
-  <div class="flex-1 w-full flex items-center overflow-x-auto snap-x snap-mandatory hide-scrollbars pb-12"
+  <div class="flex-1 w-full flex items-center overflow-x-auto snap-x snap-mandatory hide-scrollbars pb-24"
        data-controller="scroll-center">
     
     <% current_year = Date.today.year %>
     
-    <!-- Timeline Line -->
-    <div class="flex items-center px-[50vw] min-w-max h-full">
+    <!-- Timeline Line Container -->
+    <div class="flex items-center px-[50vw] min-w-max h-full relative">
+      <!-- The continuous line behind everything -->
+      <div class="absolute top-1/2 left-0 right-0 h-1 bg-slate-200 -translate-y-1/2 z-0"></div>
       
       <% @chapters_by_year.keys.sort.each do |year| %>
-        <div class="flex flex-col items-center justify-start h-full shrink-0 snap-center relative w-[24rem]"
-             <%= 'data-scroll-center-target="currentYear"' if year == current_year %>>
-             
-             <!-- Year Marker -->
-             <div class="text-5xl font-black <%= year == current_year ? 'text-indigo-600' : 'text-slate-300' %> mb-6 mt-10">
-               <%= year %>
-             </div>
-             
-             <!-- The Dot on the line -->
-             <div class="w-6 h-6 rounded-full border-4 border-white shadow-md z-10 <%= year == current_year ? 'bg-indigo-600' : 'bg-slate-300' %> relative">
-                <!-- Line behind dot bridging across -->
-                <div class="absolute top-[6px] left-[14px] w-[24rem] h-1 bg-slate-200 -z-10"></div>
-             </div>
-             
-             <!-- Chapters Container for the Year -->
-             <div id="chapters_year_<%= year %>" class="mt-8 flex flex-col space-y-6 w-80 relative pt-4">
-               <% @chapters_by_year[year].each do |chapter| %>
-                 <%= render chapter %>
-               <% end %>
-               
-               <% if @chapters_by_year[year].empty? %>
-                 <div class="text-slate-400 italic text-center p-4 bg-white/50 rounded-xl border border-dashed border-slate-300">No chapters yet</div>
-               <% end %>
-             </div>
-             
+        <!-- Year Marker -->
+        <div class="shrink-0 snap-center px-12 relative z-10 flex flex-col items-center justify-center" id="year_<%= year %>" <%= 'data-scroll-center-target="currentYear"' if year == current_year %>>
+          <div class="text-4xl font-black text-slate-300 absolute -top-16"><%= year %></div>
+          <div class="w-5 h-5 rounded-full bg-slate-300 border-4 border-slate-50 shadow-sm relative z-10"></div>
+        </div>
+        
+        <!-- Chapters for the Year -->
+        <div id="chapters_year_<%= year %>" class="flex items-center shrink-0">
+          <% @chapters_by_year[year].each do |chapter| %>
+            <%= render chapter %>
+          <% end %>
+          
+          <% if @chapters_by_year[year].empty? %>
+            <div class="shrink-0 snap-center px-6 relative z-10">
+              <div class="w-32 h-32 rounded-full border-2 border-dashed border-slate-300 bg-white/50 flex items-center justify-center text-slate-400 text-sm italic text-center p-4">No chapters yet</div>
+            </div>
+          <% end %>
         </div>
       <% end %>
-      
-      <!-- Fallback if timeline is totally empty -->
+
+      <!-- Fallback if totally empty -->
       <% if @chapters_by_year.empty? %>
-        <div class="flex flex-col items-center justify-start h-full shrink-0 snap-center relative w-[24rem]" data-scroll-center-target="currentYear">
-          <div class="text-5xl font-black text-indigo-600 mb-6 mt-10"><%= current_year %></div>
-          <div class="w-6 h-6 rounded-full border-4 border-white shadow-md z-10 bg-indigo-600 relative"></div>
-          <div id="chapters_year_<%= current_year %>" class="mt-8 flex flex-col space-y-6 w-80 relative pt-4">
-            <div class="text-slate-400 italic text-center p-4 bg-white/50 rounded-xl border border-dashed border-slate-300">Your timeline is empty. Start a chapter!</div>
+        <div class="shrink-0 snap-center px-12 relative z-10 flex flex-col items-center justify-center" id="year_<%= current_year %>" data-scroll-center-target="currentYear">
+          <div class="text-4xl font-black text-slate-300 absolute -top-16"><%= current_year %></div>
+          <div class="w-5 h-5 rounded-full bg-slate-300 border-4 border-slate-50 shadow-sm relative z-10"></div>
+        </div>
+        <div id="chapters_year_<%= current_year %>" class="flex items-center shrink-0">
+          <div class="shrink-0 snap-center px-6 relative z-10">
+            <div class="w-48 h-48 rounded-full border-2 border-dashed border-slate-300 bg-white/50 flex flex-col items-center justify-center text-slate-500 text-sm text-center p-6 gap-2">
+              <i class="fa-solid fa-book-open text-2xl text-slate-300"></i>
+              Your timeline is empty. Start a chapter!
+            </div>
           </div>
         </div>
       <% end %>
     </div>
   </div>
+
+  <!-- Quick Jump Bottom Bar -->
+  <% if @chapters_by_year.keys.any? %>
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-slate-100 flex items-center gap-2 z-40 overflow-x-auto max-w-[90vw] hide-scrollbars">
+      <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-2 shrink-0">Jump To</span>
+      <% @chapters_by_year.keys.sort.each do |year| %>
+        <button type="button" 
+                data-action="click->scroll-center#scrollToYear" 
+                data-year="<%= year %>"
+                class="px-3 py-1.5 rounded-full text-sm font-semibold transition-colors shrink-0 cursor-pointer <%= year == current_year ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' %>">
+          <%= year %>
+        </button>
+      <% end %>
+    </div>
+  <% end %>
 </div>
 
 <style>

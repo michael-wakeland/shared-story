@@ -1,32 +1,21 @@
-<div id="<%= dom_id(chapter) %>" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 transition-all hover:shadow-md hover:-translate-y-1 group">
-  <div class="flex justify-between items-start mb-2">
-    <h3 class="font-bold text-xl text-slate-800"><%= chapter.title %></h3>
-    <% if chapter.published? %>
-      <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full shrink-0 ml-2">Published</span>
-    <% else %>
-      <span class="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-semibold rounded-full shrink-0 ml-2">Draft</span>
-    <% end %>
-  </div>
-  
-  <p class="text-slate-600 text-sm mb-4 line-clamp-3"><%= chapter.description %></p>
-  
-  <div class="text-xs text-slate-400 flex items-center justify-between">
-    <span class="flex items-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      </svg>
-      <%= chapter.start_date&.strftime("%b %d") || "TBD" %> 
-      <% if chapter.end_date %>
-        <span class="mx-1">-</span> <%= chapter.end_date.strftime("%b %d") %>
-      <% end %>
-    </span>
+<div class="shrink-0 snap-center px-6 relative z-10 flex flex-col items-center justify-center" id="<%= dom_id(chapter) %>_wrapper">
+  <%
+    entries_count = chapter.total_entries_count
+    size_class = case entries_count
+                 when 0..5 then "w-28 h-28 text-sm"
+                 when 6..20 then "w-36 h-36 text-base"
+                 when 21..50 then "w-44 h-44 text-lg"
+                 else "w-52 h-52 text-xl"
+                 end
+  %>
+  <%= link_to chapter_path(chapter), id: dom_id(chapter), data: { turbo_frame: "modal" }, class: "group relative flex flex-col items-center justify-center rounded-full bg-white shadow-md border border-slate-200 hover:shadow-xl hover:border-indigo-300 hover:scale-105 transition-all duration-300 #{size_class}" do %>
+    <span class="font-bold text-slate-800 text-center px-4 line-clamp-3 leading-tight group-hover:text-indigo-600 transition-colors"><%= chapter.title %></span>
+    <span class="text-xs font-medium text-slate-400 mt-2"><%= chapter.start_date&.strftime("%b %Y") || "TBD" %></span>
     
-    <span class="font-medium text-indigo-500 bg-indigo-50 px-2 py-1 rounded-md">
-      <%= pluralize(chapter.story_threads.count, 'thread') %>
-    </span>
-  </div>
-  
-  <div id="chapter_<%= chapter.id %>_latest_entry" class="mt-4 text-xs font-medium text-indigo-600 h-4 transition-all">
-    <!-- Turbo stream target for the latest entry update -->
-  </div>
+    <% if entries_count > 0 %>
+      <div class="absolute top-1 right-1 bg-indigo-500 text-white text-[11px] font-bold px-2 py-1 rounded-full shadow-sm border-2 border-white">
+        <%= entries_count %>
+      </div>
+    <% end %>
+  <% end %>
 </div>

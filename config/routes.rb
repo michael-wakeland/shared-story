@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   root "welcome#index"
   resource :registration, only: %i[new create]
   get "timeline", to: "timeline#index", as: :timeline
+  resources :chapters, only: %i[show new create]
+  resources :story_threads, only: %i[show]
   
   resource :session
   resources :passwords, param: :token

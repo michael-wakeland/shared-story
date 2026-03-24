@@ -1,0 +1,88 @@
+<%= turbo_frame_tag "modal" do %>
+  <div data-controller="modal" class="relative z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" data-action="click->modal#close"></div>
+
+    <div class="fixed inset-0 z-10 overflow-y-auto pointer-events-none">
+      <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+        <div class="relative transform overflow-hidden rounded-2xl bg-slate-50 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl pointer-events-auto border border-slate-200 flex flex-col h-[90vh]">
+          
+          <!-- Modal Header with Back Button -->
+          <div class="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-100 shrink-0 sticky top-0 z-10">
+            <div class="flex items-center gap-4">
+              <%= link_to chapter_path(@chapter), class: "w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-colors", data: { turbo_frame: "modal" } do %>
+                <i class="fa-solid fa-arrow-left"></i>
+              <% end %>
+              <div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5"><%= @chapter.title %></div>
+                <h3 class="text-xl font-extrabold text-slate-800 tracking-tight leading-none" id="modal-title"><%= @story_thread.title %></h3>
+              </div>
+            </div>
+            
+            <button type="button" class="text-slate-400 hover:text-slate-600 transition-colors bg-transparent border-0 cursor-pointer p-2 rounded-full hover:bg-slate-100" data-action="click->modal#close">
+              <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+          </div>
+
+          <!-- Modal Content (Scrollable Conversation Feed) -->
+          <div class="px-6 py-6 overflow-y-auto flex-1 hide-scrollbars bg-slate-50 flex flex-col">
+            
+            <!-- AI Summary Placeholder -->
+            <div class="mb-8 bg-gradient-to-br from-indigo-50 to-purple-50 p-5 rounded-2xl border border-indigo-100 shadow-sm relative overflow-hidden">
+              <div class="absolute top-0 right-0 p-4 opacity-10">
+                <i class="fa-solid fa-robot text-6xl text-indigo-900"></i>
+              </div>
+              <div class="relative z-10">
+                <h4 class="text-xs font-bold text-indigo-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <i class="fa-solid fa-sparkles"></i> AI Summary
+                </h4>
+                <p class="text-slate-700 leading-relaxed text-sm">
+                  This thread captures the discussion and memories from <strong><%= @story_thread.title %></strong>. 
+                  <% if @story_thread.entries.count > 5 %>
+                    The family shared <%= @story_thread.entries.count %> entries, highlighting key moments and photos from this event.
+                  <% else %>
+                    The conversation is just getting started with a few entries.
+                  <% end %>
+                </p>
+              </div>
+            </div>
+
+            <!-- Conversation Entries -->
+            <div class="flex-1 space-y-6 flex flex-col justify-end">
+              <% if @story_thread.entries.any? %>
+                <% @story_thread.entries.each do |entry| %>
+                  <!-- Entry Bubble -->
+                  <div class="flex flex-col <%= entry.user == Current.user ? 'items-end' : 'items-start' %> group">
+                    <div class="text-xs text-slate-400 font-medium mb-1 px-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <%= entry.user.email_address.split('@').first.capitalize %> &bull; <%= entry.created_at.strftime("%b %d, %I:%M %p") %>
+                    </div>
+                    <div class="max-w-[85%] px-5 py-3 rounded-2xl text-[15px] leading-relaxed shadow-sm
+                                <%= entry.user == Current.user ? 'bg-indigo-600 text-white rounded-tr-sm' : 'bg-white text-slate-800 border border-slate-100 rounded-tl-sm' %>">
+                      <%= entry.body %>
+                    </div>
+                  </div>
+                <% end %>
+              <% else %>
+                <div class="text-center py-12 text-slate-400 italic">No entries in this thread yet.</div>
+              <% end %>
+            </div>
+            
+          </div>
+          
+          <!-- Input Placeholder -->
+          <div class="p-4 bg-white border-t border-slate-100 shrink-0">
+            <div class="flex items-center gap-3">
+              <button class="w-10 h-10 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-colors shrink-0">
+                <i class="fa-solid fa-camera"></i>
+              </button>
+              <input type="text" placeholder="Add to the story..." class="flex-1 bg-slate-50 border border-slate-200 rounded-full px-5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+              <button class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 transition-colors shrink-0 shadow-sm">
+                <i class="fa-solid fa-paper-plane text-sm -ml-0.5"></i>
+              </button>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

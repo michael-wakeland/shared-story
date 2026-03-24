@@ -29,4 +29,26 @@ export default class extends Controller {
       behavior: 'smooth'
     })
   }
+
+  scrollToYear(event) {
+    const year = event.currentTarget.dataset.year
+    if (!year) return
+    
+    const target = document.getElementById(`year_${year}`)
+    if (target) {
+      this.centerOnTarget(target)
+      
+      // Update styling of buttons
+      const buttons = this.element.parentElement.querySelectorAll('button[data-year]')
+      buttons.forEach(btn => {
+        if (btn.dataset.year === year) {
+          btn.classList.add('bg-indigo-100', 'text-indigo-700')
+          btn.classList.remove('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200')
+        } else {
+          btn.classList.remove('bg-indigo-100', 'text-indigo-700')
+          btn.classList.add('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200')
+        }
+      })
+    }
+  }
 }
