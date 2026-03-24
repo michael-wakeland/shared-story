@@ -1,6 +1,6 @@
 <%= turbo_stream_from "timeline" %>
 
-<div class="flex-1 w-full bg-slate-50 flex flex-col pt-8 overflow-hidden relative">
+<div class="flex-1 w-full bg-slate-50 flex flex-col pt-8 overflow-hidden relative" data-controller="scroll-center">
   <div class="text-center mb-6 shrink-0 relative px-4 z-20">
     <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight">Our Family Story</h1>
     <p class="text-slate-500 mt-2 text-lg">A timeline of our chapters</p>
@@ -12,8 +12,9 @@
     </div>
   </div>
 
-  <div class="flex-1 w-full flex items-center overflow-x-auto snap-x snap-mandatory hide-scrollbars pb-24"
-       data-controller="scroll-center">
+  <div class="flex-1 w-full flex items-center overflow-x-auto snap-x snap-mandatory hide-scrollbars pb-24 cursor-grab active:cursor-grabbing"
+       data-scroll-center-target="container"
+       data-action="mousedown->scroll-center#dragStart mouseleave->scroll-center#dragEnd mouseup->scroll-center#dragEnd mousemove->scroll-center#drag">
     
     <% current_year = Date.today.year %>
     

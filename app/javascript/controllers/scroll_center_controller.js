@@ -2,30 +2,59 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="scroll-center"
 export default class extends Controller {
-  static targets = ["currentYear"]
+  static targets = ["currentYear", "container"]
 
   connect() {
+    this.isDown = false
+    this.startX = 0
+    this.scrollLeft = 0
+
     if (this.hasCurrentYearTarget) {
       // Small timeout to ensure layout has finished rendering and sizes are accurate
       setTimeout(() => {
         this.centerOnTarget(this.currentYearTarget)
-      }, 50)
+      }, 100)
     }
   }
 
-  centerOnTarget(target) {
-    const container = this.element
-    
-    // Calculate the position to scroll to so the target is perfectly centered
-    const containerHalfWidth = container.offsetWidth / 2
-    const targetHalfWidth = target.offsetWidth / 2
-    
-    // Account for padding or margins on the container if needed (e.g. scrollLeft = offsetLeft - containerHalfWidth + targetHalfWidth)
-    const scrollPosition = target.offsetLeft - containerHalfWidth + targetHalfWidth
+  dragStart(e) {
+    this.isDown = true
+    this.containerTarget.style.scrollSnapType = 'none'
+    this.startX = e.pageX - this.containerTarget.offsetLeft
+    this.scrollLeft = this.containerTarget.scrollLeft
+  }
 
-    // Smoothly scroll the container to the calculated position
+  dragEnd() {
+    this.isDown = false
+    this.containerTarget.style.scrollSnapType = ''
+  }
+
+  drag(e) {
+    if (!this.isDown) return
+    e.preventDefault()
+    const x = e.pageX - this.containerTarget.offsetLeft
+    const walk = (x - this.startX) * 2 // Scroll-fast
+    this.containerTarget.scrollLeft = this.scrollLeft - walk
+  }
+
+  centerOnTarget(target) {
+    const container = this.hasContainerTarget ? this.containerTarget : this.element
+    
+    // Calculate the position relative to the container
+    const containerRect = container.getBoundingClientRect()
+    const targetRect = target.getBoundingClientRect()
+    
+    // The target's distance from the left of the container's viewport
+    const relativeLeft = targetRect.left - containerRect.left
+    
+    // We want this relativeLeft to be equal to (containerWidth / 2 - targetWidth / 2)
+    const desiredRelativeLeft = (containerRect.width / 2) - (targetRect.width / 2)
+    
+    // The amount we need to adjust scrollLeft by
+    const scrollAdjustment = relativeLeft - desiredRelativeLeft
+    
     container.scrollTo({
-      left: scrollPosition,
+      left: container.scrollLeft + scrollAdjustment,
       behavior: 'smooth'
     })
   }
@@ -39,7 +68,7 @@ export default class extends Controller {
       this.centerOnTarget(target)
       
       // Update styling of buttons
-      const buttons = this.element.parentElement.querySelectorAll('button[data-year]')
+      const buttons = this.element.querySelectorAll('button[data-year]')
       buttons.forEach(btn => {
         if (btn.dataset.year === year) {
           btn.classList.add('bg-indigo-100', 'text-indigo-700')
